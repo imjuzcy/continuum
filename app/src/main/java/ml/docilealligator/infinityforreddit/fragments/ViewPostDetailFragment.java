@@ -623,16 +623,19 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mCommentsAdapter.setComments(comments, hasMoreChildren);
                 restoreCommentScrollPosition();
             } else {
-                if (commentFilterFetched) {
-                    fetchCommentsAfterCommentFilterAvailable();
-                } else {
-                    FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
-                            commentFilter -> {
-                                mCommentFilter = commentFilter;
-                                commentFilterFetched = true;
-                                fetchCommentsAfterCommentFilterAvailable();
-                            });
-                }
+                mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
+                binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
+            }
+
+            if (commentFilterFetched) {
+                fetchCommentsAfterCommentFilterAvailable();
+            } else {
+                FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
+                        commentFilter -> {
+                            mCommentFilter = commentFilter;
+                            commentFilterFetched = true;
+                            fetchCommentsAfterCommentFilterAvailable();
+                        });
             }
         }
 
