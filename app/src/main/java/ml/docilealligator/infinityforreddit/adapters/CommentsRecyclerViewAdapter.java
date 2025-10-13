@@ -716,9 +716,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                     String scoreText = mActivity.getString(R.string.top_score,
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType()));
-                    if (comment.getChildCount() > 0) {
-                        scoreText = "+" + comment.getChildCount() + " | " + scoreText;
-                    }
                     ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setText(scoreText);
                 } else if (mHideTheNumberOfVotes) {
                     ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setText(mActivity.getString(R.string.vote));
@@ -2096,9 +2093,25 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
             binding.userNameTextViewItemCommentFullyCollapsed.setTextColor(mUsernameColor);
-            binding.childCountTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
             binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
             binding.timeTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
+
+            // Create rounded corner background for child count (same as in CommentBaseViewHolder)
+            GradientDrawable childCountBackgroundDrawable = new GradientDrawable();
+            childCountBackgroundDrawable.setShape(GradientDrawable.RECTANGLE);
+            childCountBackgroundDrawable.setCornerRadius(Utils.convertDpToPixel(8, mActivity)); // 8dp radius
+            childCountBackgroundDrawable.setColor(mUsernameColor);
+
+            // Calculate padding (same as in CommentBaseViewHolder)
+            int horizontalPadding = (int) Utils.convertDpToPixel(4, mActivity); // 4dp
+            int verticalPadding = (int) Utils.convertDpToPixel(2, mActivity); // 2dp
+
+            // Apply inset and padding and set contrasting text color
+            int insetPx = (int) Utils.convertDpToPixel(1, mActivity); // 1dp inset
+            InsetDrawable insetChildCountBackground = new InsetDrawable(childCountBackgroundDrawable, insetPx);
+            binding.childCountTextViewItemCommentFullyCollapsed.setBackground(insetChildCountBackground);
+            binding.childCountTextViewItemCommentFullyCollapsed.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding);
+            binding.childCountTextViewItemCommentFullyCollapsed.setTextColor(mCommentBackgroundColor);
 
             if (mShowCommentDivider) {
                 if (mDividerType == DIVIDER_NORMAL) {
