@@ -662,12 +662,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
             }
 
-            // Disable ALL item animations for potentially smoother expand/collapse
-            binding.postDetailRecyclerViewViewPostDetailFragment.setItemAnimator(null);
-            if (mCommentsRecyclerView != null) {
-                mCommentsRecyclerView.setItemAnimator(null);
-            }
-
             if (commentFilterFetched) {
                 fetchCommentsAfterCommentFilterAvailable();
             } else {
