@@ -422,10 +422,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (post != null) {
                 switch (post.getPostType()) {
                     case Post.VIDEO_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         if (mAutoplay) {
                             if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
@@ -436,23 +432,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                     case Post.GIF_TYPE:
                     case Post.IMAGE_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                     case Post.GALLERY_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_GALLERY_TYPE;
                     case Post.LINK_TYPE:
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
                                 return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
@@ -523,10 +507,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (post != null) {
                 switch (post.getPostType()) {
                     case Post.VIDEO_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         if (mAutoplay) {
                             if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
                                 return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
@@ -537,23 +517,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                     case Post.GIF_TYPE:
                     case Post.IMAGE_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                     case Post.GALLERY_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_2_GALLERY_TYPE;
                     case Post.LINK_TYPE:
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD:
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
@@ -577,10 +545,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (post != null) {
                 switch (post.getPostType()) {
                     case Post.VIDEO_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         if (mAutoplay) {
                             if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
                                 return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
@@ -591,23 +555,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
                     case Post.GIF_TYPE:
                     case Post.IMAGE_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
                     case Post.GALLERY_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         return VIEW_TYPE_POST_CARD_3_GALLERY_TYPE;
                     case Post.LINK_TYPE:
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        if (shouldUseCompactLayout(post)) {
-                            return VIEW_TYPE_POST_COMPACT;
-                        }
-
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD:
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
@@ -1470,14 +1422,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return new Post.Preview(thumbnailUrl, 0, 0, "", "");
         }
         return preview;
-    }
-
-    private boolean hasValidThumbnailFallback(String thumbnailUrl) {
-        return thumbnailUrl != null && !thumbnailUrl.isEmpty() && !thumbnailUrl.equals("self") && !thumbnailUrl.equals("default") && !thumbnailUrl.equals("nsfw") && !thumbnailUrl.equals("spoiler") && !thumbnailUrl.equals("image") && thumbnailUrl.startsWith("http");
-    }
-
-    private boolean shouldUseCompactLayout(Post post) {
-        return (post.getPreviews() == null || post.getPreviews().isEmpty()) && !hasValidThumbnailFallback(post.getThumbnailUrl());
     }
 
     private void loadImage(final RecyclerView.ViewHolder holder) {
