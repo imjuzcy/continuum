@@ -100,6 +100,7 @@ public class MaterialYouUtils {
             lightTheme.filledCardViewBackgroundColor = lightTheme.cardViewBackgroundColor;
             lightTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
             lightTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
+            lightTheme.fullyCollapsedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_50);
             lightTheme.bottomAppBarBackgroundColor = lightTheme.colorPrimary;
             lightTheme.navBarColor = lightTheme.colorPrimary;
             lightTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_900);
@@ -131,6 +132,7 @@ public class MaterialYouUtils {
             darkTheme.filledCardViewBackgroundColor = darkTheme.cardViewBackgroundColor;
             darkTheme.commentBackgroundColor = darkTheme.cardViewBackgroundColor;
             darkTheme.awardedCommentBackgroundColor = darkTheme.cardViewBackgroundColor;
+            darkTheme.fullyCollapsedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_900);
             darkTheme.bottomAppBarBackgroundColor = darkTheme.colorPrimary;
             darkTheme.navBarColor = darkTheme.colorPrimary;
             darkTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_10);
