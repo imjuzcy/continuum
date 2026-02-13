@@ -43,7 +43,11 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build Release APK
-      run: ./gradlew assembleRelease; ./gradlew assembleRelease
+      run: ./gradlew assembleRelease || true
+      continue-on-error: true
+
+    - name: Build Release APK - Rebuild
+      run: ./gradlew assembleRelease
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
