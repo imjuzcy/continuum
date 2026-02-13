@@ -910,7 +910,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 binding.toolbarViewPostDetailActivity.setTitle(subredditNamePrefixed);
                 binding.toolbarViewPostDetailActivity.setSubtitle(sortType.getType().fullName);
             } else {
-                // Fallback to just showing the sort type if subreddit name is not available
+                // Fallback to showing sort type only when post data is not yet loaded
                 binding.toolbarViewPostDetailActivity.setTitle(sortType.getType().fullName);
                 binding.toolbarViewPostDetailActivity.setSubtitle(null);
             }
@@ -918,6 +918,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void setToolbarSubtitle(@Nullable String subtitle) {
+        // Try setting via binding first, fall back to ActionBar if binding is not available
         if (binding != null && binding.toolbarViewPostDetailActivity != null) {
             binding.toolbarViewPostDetailActivity.setSubtitle(subtitle);
         } else {
