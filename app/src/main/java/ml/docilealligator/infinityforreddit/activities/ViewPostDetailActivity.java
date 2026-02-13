@@ -905,24 +905,23 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.changeSortType(sortType);
-            binding.toolbarViewPostDetailActivity.setTitle("r/" + fragment.getSubredditName());
-            binding.toolbarViewPostDetailActivity.setSubtitle(sortType.getType().fullName);
+            String subredditName = fragment.getSubredditName();
+            if (subredditName != null) {
+                binding.toolbarViewPostDetailActivity.setTitle("r/" + subredditName);
+                binding.toolbarViewPostDetailActivity.setSubtitle(sortType.getType().fullName);
+            }
         }
     }
 
     public void setToolbarSubtitle(@Nullable String subtitle) {
-        try {
-            if (binding != null && binding.toolbarViewPostDetailActivity != null) {
-                binding.toolbarViewPostDetailActivity.setSubtitle(subtitle);
-                return;
-            }
-        } catch (Exception ignored) {}
-        try {
+        if (binding != null && binding.toolbarViewPostDetailActivity != null) {
+            binding.toolbarViewPostDetailActivity.setSubtitle(subtitle);
+        } else {
             androidx.appcompat.app.ActionBar ab = getSupportActionBar();
             if (ab != null) {
                 ab.setSubtitle(subtitle);
             }
-        } catch (Exception ignored) {}
+        }
     }
 
     @Override
