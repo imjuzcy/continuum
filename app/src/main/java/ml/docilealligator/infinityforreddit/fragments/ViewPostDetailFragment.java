@@ -255,6 +255,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         return null;
     }
 
+    public String getSubredditNamePrefixed() {
+        if (mPost != null) {
+            return mPost.getSubredditNamePrefixed();
+        }
+        return null;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

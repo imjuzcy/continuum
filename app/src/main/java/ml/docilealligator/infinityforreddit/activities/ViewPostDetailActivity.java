@@ -905,10 +905,14 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.changeSortType(sortType);
-            String subredditName = fragment.getSubredditName();
-            if (subredditName != null) {
-                binding.toolbarViewPostDetailActivity.setTitle("r/" + subredditName);
+            String subredditNamePrefixed = fragment.getSubredditNamePrefixed();
+            if (subredditNamePrefixed != null) {
+                binding.toolbarViewPostDetailActivity.setTitle(subredditNamePrefixed);
                 binding.toolbarViewPostDetailActivity.setSubtitle(sortType.getType().fullName);
+            } else {
+                // Fallback to just showing the sort type if subreddit name is not available
+                binding.toolbarViewPostDetailActivity.setTitle(sortType.getType().fullName);
+                binding.toolbarViewPostDetailActivity.setSubtitle(null);
             }
         }
     }
