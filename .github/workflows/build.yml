@@ -1,0 +1,52 @@
+name: Build Release
+
+on:
+  push:
+    branches:
+      - dev
+      - nightly
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Decode Keystore
+      env:
+        KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+      run: |
+        echo "$KEYSTORE_B64" | base64 --decode > ${{ github.workspace }}/Infinity.jks
+
+    - name: Create keystore.properties
+      env:
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+      run: |
+        echo "keyAlias=$KEY_ALIAS" > keystore.properties
+        echo "keyPassword=$KEY_PASSWORD" >> keystore.properties
+        echo "storePassword=$STORE_PASSWORD" >> keystore.properties
+        echo "storeFile=${{ github.workspace }}/Infinity.jks" >> keystore.properties
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease; ./gradlew assembleRelease
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: infinity-release-build
+        path: app/build/outputs/apk/release/*.apk
