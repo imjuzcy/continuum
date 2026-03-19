@@ -77,6 +77,7 @@
     <string name="action_edit_multi_reddit">Edit MultiReddit</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
     <string name="action_copy_multi_reddit">Copy Multireddit</string>
+    <string name="action_list_subreddits">MultiReddit\'s Subreddits</string>
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
@@ -431,6 +432,7 @@
     <string name="settings_time_format_title">Time Format</string>
     <string name="settings_category_post_title">Post</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
+    <string name="settings_default_post_layout_unfolded">Default Post Layout for a Foldable Unfolded</string>
     <string name="settings_default_link_post_layout">Default Link Post Layout</string>
     <string name="settings_show_divider_in_compact_layout">Show Divider</string>
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Show Thumbnail on the Left</string>
@@ -491,8 +493,16 @@
     <string name="settings_share_title">Share</string>
     <string name="settings_share_summary">Share this app to other people if you enjoy it</string>
     <string name="settings_privacy_policy_title">Privacy Policy</string>
+    <string name="settings_debug_title">Debug</string>
     <string name="settings_version_title">Continuum</string>
     <string name="settings_version_summary">Version %s</string>
+    <string name="settings_screen_width_dp_title">Screen Width</string>
+    <string name="settings_screen_width_dp_summary">%d dp</string>
+    <string name="settings_smallest_screen_width_dp_title">Smallest Screen Width</string>
+    <string name="settings_smallest_screen_width_dp_summary">%d dp</string>
+    <string name="settings_is_tablet_title">isTablet (sw600dp)</string>
+    <string name="settings_is_tablet_summary_true">true</string>
+    <string name="settings_is_tablet_summary_false">false</string>
     <string name="settings_category_customization_title">Customization</string>
     <string name="settings_customize_light_theme_title">Light Theme</string>
     <string name="settings_customize_dark_theme_title">Dark Theme</string>
@@ -636,6 +646,8 @@
     <string name="settings_separate_post_and_comments_in_portrait_mode_title">Separate Post And Comments in Portrait Mode</string>
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">Separate Post And Comments in Landscape Mode</string>
     <string name="settings_separate_post_and_comments_summary">Video autoplay will be disabled in the post detail page</string>
+    <string name="settings_swap_post_and_comments_in_split_mode_title">Swap Post and Comments Sides</string>
+    <string name="settings_swap_post_and_comments_in_split_mode_summary">Show comments on the left and the post on the right in split-screen mode</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
     <string name="settings_navigation_drawer_enable_hide_karma_title">Hide Account Karma</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
@@ -1170,6 +1182,7 @@
     <string name="warning">Warning</string>
     <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
     <string name="this_user_has_nsfw_content">This user has NSFW content</string>
+    <string name="this_post_contains_sensitive_content">This post contains NSFW content.</string>
     <string name="dismiss">Dismiss</string>
     <string name="leave">Leave</string>
 

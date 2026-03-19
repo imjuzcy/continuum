@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
         Preference sharePreference = findPreference(SharedPreferencesUtils.SHARE_KEY);
         Preference versionPreference = findPreference(SharedPreferencesUtils.VERSION_KEY);
+
 
         if (openSourcePreference != null) {
             openSourcePreference.setOnPreferenceClickListener(preference -> {
@@ -121,5 +123,6 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
                 }
             });
         }
+
     }
 }

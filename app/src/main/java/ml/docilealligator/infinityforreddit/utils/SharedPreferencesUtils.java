@@ -28,6 +28,9 @@ public class SharedPreferencesUtils {
     public static final String SHARE_KEY = "share";
     public static final String PRIVACY_POLICY_KEY = "privacy_policy";
     public static final String VERSION_KEY = "version";
+    public static final String SCREEN_WIDTH_DP_KEY = "screen_width_dp";
+    public static final String SMALLEST_SCREEN_WIDTH_DP_KEY = "smallest_screen_width_dp";
+    public static final String IS_TABLET_KEY = "is_tablet";
     public static final String FONT_SIZE_KEY = "font_size";
     public static final String TITLE_FONT_SIZE_KEY = "title_font_size";
     public static final String CONTENT_FONT_SIZE_KEY = "content_font_size";
@@ -204,6 +207,7 @@ public class SharedPreferencesUtils {
     public static final String HIDE_ACCOUNT_KARMA_NAV_BAR = "hide_account_karma";
     public static final String LOCK_SCREEN_ANIMATION = "lock_screen_animation";
     public static final String ENABLE_FOLD_SUPPORT = "enable_fold_support";
+    public static final String DEFAULT_POST_LAYOUT_UNFOLDED_KEY = "default_post_layout_unfolded";
     public static final String LOOP_VIDEO = "loop_video";
     public static final String DEFAULT_PLAYBACK_SPEED = "default_playback_speed";
     public static final String LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI = "legacy_autoplay_video_controller_ui";
@@ -437,6 +441,7 @@ public class SharedPreferencesUtils {
     public static final String POST_DETAILS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_details";
     public static final String SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE = "separate_post_and_comments_in_portrait_mode";
     public static final String SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE = "separate_post_and_comments_in_landscape_mode";
+    public static final String SWAP_POST_AND_COMMENTS_IN_SPLIT_MODE = "swap_post_and_comments_in_split_mode";
 
     public static final String SECURITY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.security";
     public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";

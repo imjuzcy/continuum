@@ -46,4 +46,5 @@
         app:title="@string/settings_version_title"
         app:summary="@string/settings_version_summary" />
 
+
 </PreferenceScreen>

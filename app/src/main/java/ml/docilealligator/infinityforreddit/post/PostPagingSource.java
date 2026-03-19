@@ -10,9 +10,17 @@ import androidx.paging.PagingState;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
@@ -41,6 +49,8 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public static final String USER_WHERE_HIDDEN = "hidden";
     public static final String USER_WHERE_SAVED = "saved";
 
+    private static final int HTTP_INTERNAL_SERVER_ERROR = 500;
+
     private final Executor executor;
     private final Retrofit retrofit;
     private final String accessToken;
@@ -58,6 +68,9 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private String multiRedditPath;
     private final LinkedHashSet<Post> postLinkedHashSet;
     private String previousLastItem;
+    private List<String> multiRedditUsernames;
+    private boolean multiRedditUsernamesFetched = false;
+    private String subredditOnlyName;
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences,
@@ -252,16 +265,40 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 IOException.class, LoadResult.Error::new, executor);
     }
 
-    private ListenableFuture<LoadResult<String, Post>> loadSubredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
-        ListenableFuture<Response<String>> subredditPost;
+    private ListenableFuture<Response<String>> fetchSubredditPosts(LoadParams<String> loadParams, RedditAPI api, int limit) {
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey());
+            return api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(),
+                    sortType.getTime(), loadParams.getKey(), limit);
         } else {
-            subredditPost = api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType(),
-                    sortType.getTime(), loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
+            return api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType(),
+                    sortType.getTime(), loadParams.getKey(), limit,
+                    APIUtils.getOAuthHeader(accessToken));
         }
+    }
 
-        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(subredditPost, this::transformData, executor);
+    private ListenableFuture<LoadResult<String, Post>> loadSubredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
+        int[] limit = {APIUtils.subredditAPICallLimit(subredditOrUserName)};
+        ListenableFuture<Response<String>> subredditPost = fetchSubredditPosts(loadParams, api, limit[0]);
+
+        // Retry with halved limit on HTTP 500
+        ListenableFuture<Response<String>> retryOnce = Futures.transformAsync(subredditPost, response -> {
+            if (response.code() == HTTP_INTERNAL_SERVER_ERROR) {
+                limit[0] /= 2;
+                return fetchSubredditPosts(loadParams, api, limit[0]);
+            }
+            return Futures.immediateFuture(response);
+        }, executor);
+
+        // Retry with halved limit again on HTTP 500
+        ListenableFuture<Response<String>> retryTwice = Futures.transformAsync(retryOnce, response -> {
+            if (response.code() == HTTP_INTERNAL_SERVER_ERROR) {
+                limit[0] /= 2;
+                return fetchSubredditPosts(loadParams, api, limit[0]);
+            }
+            return Futures.immediateFuture(response);
+        }, executor);
+
+        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(retryTwice, this::transformData, executor);
 
         ListenableFuture<LoadResult<String, Post>> partialLoadResultFuture =
                 Futures.catching(pageFuture, HttpException.class,
@@ -323,45 +360,318 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     }
 
     private ListenableFuture<LoadResult<String, Post>> loadMultiRedditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
-        ListenableFuture<Response<String>> multiRedditPosts;
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            if (query != null && !query.isEmpty()) {
+        // When searching within multi-reddit, keep original behavior (no user post merging)
+        if (query != null && !query.isEmpty()) {
+            ListenableFuture<Response<String>> multiRedditPosts;
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 multiRedditPosts = api.searchMultiRedditPostsListenableFuture(multiRedditPath, query, loadParams.getKey(),
                         sortType.getType(), sortType.getTime());
             } else {
-                multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, sortType.getType(), loadParams.getKey(), sortType.getTime());
-            }
-        } else {
-            if (query != null && !query.isEmpty()) {
                 multiRedditPosts = api.searchMultiRedditPostsOauthListenableFuture(multiRedditPath, query, loadParams.getKey(),
                         sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+            }
+
+            ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(multiRedditPosts, this::transformData, executor);
+            return catchErrors(pageFuture);
+        }
+
+        // Parse composite after key
+        String multiAfterKey = getMainAfterKey(loadParams.getKey());
+        Map<String, String> currentUserAfterKeys = parseUserAfterKeys(loadParams.getKey());
+        final boolean isInitialLoad = loadParams.getKey() == null;
+
+        // Determine if we have users to merge (or might have on first load)
+        boolean hasUsers = multiRedditUsernames != null && !multiRedditUsernames.isEmpty();
+        boolean mightHaveUsers = !multiRedditUsernamesFetched && !accountName.equals(Account.ANONYMOUS_ACCOUNT);
+
+        // Fetch multi-reddit posts (use reduced limit when merging with user posts)
+        ListenableFuture<Response<String>> multiRedditPosts;
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, sortType.getType(), multiAfterKey, sortType.getTime());
+        } else if (hasUsers || mightHaveUsers) {
+            multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, sortType.getType(), multiAfterKey,
+                    sortType.getTime(), APIUtils.getOAuthHeader(accessToken), 75);
+        } else {
+            multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, sortType.getType(), multiAfterKey,
+                    sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+        }
+
+        // On first load, fetch multi-reddit info to discover user entries, then fire user
+        // post requests as soon as usernames are known (without waiting for multi-reddit posts)
+        if (mightHaveUsers) {
+            multiRedditUsernamesFetched = true;
+            ListenableFuture<Response<String>> multiInfoFuture = api.getMultiRedditInfoListenableFuture(
+                    APIUtils.getOAuthHeader(accessToken), multiRedditPath);
+
+            // As soon as info returns, launch user post fetches immediately
+            ListenableFuture<List<Response<String>>> userPostsFuture = Futures.transformAsync(multiInfoFuture, infoResponse -> {
+                parseMultiRedditInfoResponse(infoResponse);
+                if (multiRedditUsernames == null || multiRedditUsernames.isEmpty()) {
+                    return Futures.immediateFuture(new ArrayList<>());
+                }
+                List<ListenableFuture<Response<String>>> userFutures = launchUserPostFetches(api, currentUserAfterKeys, isInitialLoad);
+                return Futures.successfulAsList(userFutures);
+            }, executor);
+
+            // Wait for multi-reddit posts AND user posts (both in flight simultaneously)
+            ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.whenAllSucceed(multiRedditPosts, userPostsFuture)
+                    .call(() -> {
+                        Response<String> mainResponse = Futures.getDone(multiRedditPosts);
+                        List<Response<String>> userResponses = Futures.getDone(userPostsFuture);
+                        return mergeResponses(mainResponse, userResponses, getUsersToFetch(currentUserAfterKeys, isInitialLoad));
+                    }, executor);
+
+            return catchErrors(pageFuture);
+        }
+
+        // Subsequent loads: fetch multi-reddit posts and user posts all in parallel
+        if (multiRedditUsernames != null && !multiRedditUsernames.isEmpty()) {
+            List<ListenableFuture<Response<String>>> userFutures = launchUserPostFetches(api, currentUserAfterKeys, isInitialLoad);
+            ListenableFuture<List<Response<String>>> allUserPosts = Futures.successfulAsList(userFutures);
+
+            ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.whenAllSucceed(multiRedditPosts, allUserPosts)
+                    .call(() -> {
+                        Response<String> mainResponse = Futures.getDone(multiRedditPosts);
+                        List<Response<String>> userResponses = Futures.getDone(allUserPosts);
+                        return mergeResponses(mainResponse, userResponses, getUsersToFetch(currentUserAfterKeys, isInitialLoad));
+                    }, executor);
+
+            return catchErrors(pageFuture);
+        }
+
+        // No users, just transform multi-reddit posts
+        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(multiRedditPosts, this::transformData, executor);
+        return catchErrors(pageFuture);
+    }
+
+    private List<String> getUsersToFetch(Map<String, String> currentUserAfterKeys, boolean isInitialLoad) {
+        List<String> users = new ArrayList<>();
+        if (multiRedditUsernames == null) return users;
+        for (String username : multiRedditUsernames) {
+            if (!isInitialLoad && currentUserAfterKeys != null && !currentUserAfterKeys.containsKey(username)) {
+                continue;
+            }
+            users.add(username);
+        }
+        return users;
+    }
+
+    private List<ListenableFuture<Response<String>>> launchUserPostFetches(
+            RedditAPI api, Map<String, String> currentUserAfterKeys, boolean isInitialLoad) {
+        List<ListenableFuture<Response<String>>> futures = new ArrayList<>();
+        for (String username : multiRedditUsernames) {
+            if (!isInitialLoad && currentUserAfterKeys != null && !currentUserAfterKeys.containsKey(username)) {
+                continue;
+            }
+            String userAfter = (currentUserAfterKeys != null) ? currentUserAfterKeys.get(username) : null;
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                futures.add(api.getUserPostsListenableFuture(username, userAfter, sortType.getType(), sortType.getTime(), 25));
             } else {
-                multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, sortType.getType(), loadParams.getKey(),
-                        sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+                futures.add(api.getUserPostsOauthListenableFuture(APIUtils.AUTHORIZATION_BASE + accessToken, username, "submitted",
+                        userAfter, sortType.getType(), sortType.getTime(), 25));
+            }
+        }
+        return futures;
+    }
+
+    private String getMainAfterKey(String compositeKey) {
+        if (compositeKey == null || !compositeKey.startsWith("{")) return compositeKey;
+        try {
+            String m = new JSONObject(compositeKey).optString("m", null);
+            return (m != null && !m.isEmpty()) ? m : null;
+        } catch (JSONException e) {
+            return compositeKey;
+        }
+    }
+
+    private Map<String, String> parseUserAfterKeys(String compositeKey) {
+        if (compositeKey == null || !compositeKey.startsWith("{")) return null;
+        try {
+            JSONObject users = new JSONObject(compositeKey).optJSONObject("u");
+            if (users == null) return null;
+            Map<String, String> result = new HashMap<>();
+            Iterator<String> keys = users.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                String val = users.getString(key);
+                if (!val.isEmpty()) result.put(key, val);
+            }
+            return result;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    private void parseMultiRedditInfoResponse(Response<String> response) {
+        if (response == null || !response.isSuccessful() || response.body() == null) return;
+        try {
+            JSONObject data = new JSONObject(response.body()).getJSONObject("data");
+            JSONArray subreddits = data.getJSONArray("subreddits");
+            multiRedditUsernames = new ArrayList<>();
+            for (int i = 0; i < subreddits.length(); i++) {
+                String name = subreddits.getJSONObject(i).getString("name");
+                if (name.startsWith("u_")) {
+                    multiRedditUsernames.add(name.substring(2));
+                }
+            }
+        } catch (JSONException e) {
+            // Failed to parse multi-reddit info
+        }
+    }
+
+    private LoadResult<String, Post> mergeResponses(
+            Response<String> mainResponse, List<Response<String>> userResponses,
+            List<String> usersToFetch) {
+        int currentPostsSize = postLinkedHashSet.size();
+
+        // Parse main multi-reddit response
+        String mainLastItem = null;
+        if (mainResponse != null && mainResponse.isSuccessful()) {
+            String responseString = mainResponse.body();
+            LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostsList);
+            mainLastItem = ParsePost.getLastItem(responseString);
+            if (newPosts != null) {
+                postLinkedHashSet.addAll(newPosts);
             }
         }
 
-        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(multiRedditPosts, this::transformData, executor);
+        // If no user responses, return main response only
+        if (userResponses == null || userResponses.isEmpty()) {
+            if (mainLastItem != null && mainLastItem.equals(previousLastItem)) {
+                mainLastItem = null;
+            }
+            previousLastItem = mainLastItem;
+            int newSize = postLinkedHashSet.size();
+            if (newSize == currentPostsSize) {
+                return new LoadResult.Page<>(new ArrayList<>(), null, mainLastItem);
+            }
+            return new LoadResult.Page<>(new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, newSize), null, mainLastItem);
+        }
 
-        ListenableFuture<LoadResult<String, Post>> partialLoadResultFuture =
-                Futures.catching(pageFuture, HttpException.class,
-                        LoadResult.Error::new, executor);
+        try {
+            boolean hasMore = false;
+            JSONObject compositeAfter = new JSONObject();
 
-        return Futures.catching(partialLoadResultFuture,
-                IOException.class, LoadResult.Error::new, executor);
+            if (mainLastItem != null && !mainLastItem.isEmpty()) {
+                compositeAfter.put("m", mainLastItem);
+                hasMore = true;
+            }
+
+            // Parse user post responses
+            JSONObject userAfters = new JSONObject();
+            for (int i = 0; i < usersToFetch.size(); i++) {
+                String username = usersToFetch.get(i);
+                Response<String> userResponse = (i < userResponses.size()) ? userResponses.get(i) : null;
+                if (userResponse != null && userResponse.isSuccessful()) {
+                    String responseString = userResponse.body();
+                    LinkedHashSet<Post> userPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostsList);
+                    String userLastItem = ParsePost.getLastItem(responseString);
+                    if (userPosts != null) {
+                        postLinkedHashSet.addAll(userPosts);
+                    }
+                    if (userLastItem != null && !userLastItem.isEmpty()) {
+                        userAfters.put(username, userLastItem);
+                        hasMore = true;
+                    }
+                }
+            }
+
+            if (userAfters.length() > 0) {
+                compositeAfter.put("u", userAfters);
+            }
+
+            String nextKey = hasMore ? compositeAfter.toString() : null;
+            return buildSortedPage(currentPostsSize, nextKey);
+        } catch (JSONException e) {
+            return new LoadResult.Error<>(e);
+        }
+    }
+
+    private LoadResult<String, Post> buildSortedPage(int currentPostsSize, String nextKey) {
+        int newSize = postLinkedHashSet.size();
+        if (newSize == currentPostsSize) {
+            return new LoadResult.Page<>(new ArrayList<>(), null, nextKey);
+        }
+        List<Post> resultPosts = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, newSize);
+        resultPosts = new ArrayList<>(resultPosts);
+        resultPosts.sort((a, b) -> Long.compare(b.getPostTimeMillis(), a.getPostTimeMillis()));
+        return new LoadResult.Page<>(resultPosts, null, nextKey);
+    }
+
+    private ListenableFuture<LoadResult<String, Post>> catchErrors(ListenableFuture<LoadResult<String, Post>> future) {
+        ListenableFuture<LoadResult<String, Post>> partial =
+                Futures.catching(future, HttpException.class, LoadResult.Error::new, executor);
+        return Futures.catching(partial, IOException.class, LoadResult.Error::new, executor);
     }
 
     private ListenableFuture<LoadResult<String, Post>> loadAnonymousFrontPageOrMultiredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
-        ListenableFuture<Response<String>> anonymousHomePosts = api.getAnonymousFrontPageOrMultiredditPostsListenableFuture(
-                subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey(), APIUtils.ANONYMOUS_USER_AGENT);
+        // For anonymous multireddit, extract user entries from concatenated name on first call
+        if (postType == TYPE_ANONYMOUS_MULTIREDDIT && !multiRedditUsernamesFetched) {
+            multiRedditUsernamesFetched = true;
+            String[] parts = subredditOrUserName.split("\\+");
+            List<String> subreddits = new ArrayList<>();
+            multiRedditUsernames = new ArrayList<>();
+            for (String part : parts) {
+                if (part.startsWith("u_")) {
+                    multiRedditUsernames.add(part.substring(2));
+                } else {
+                    subreddits.add(part);
+                }
+            }
+            if (!multiRedditUsernames.isEmpty() && !subreddits.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < subreddits.size(); i++) {
+                    if (i > 0) sb.append("+");
+                    sb.append(subreddits.get(i));
+                }
+                subredditOnlyName = sb.toString();
+            } else if (multiRedditUsernames.isEmpty()) {
+                subredditOnlyName = null;
+            } else {
+                // Only users, no subreddits
+                subredditOnlyName = "";
+            }
+        }
 
-        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(anonymousHomePosts, this::transformData, executor);
+        // If no users to merge, use original behavior
+        if (multiRedditUsernames == null || multiRedditUsernames.isEmpty()) {
+            ListenableFuture<Response<String>> anonymousHomePosts = api.getAnonymousFrontPageOrMultiredditPostsListenableFuture(
+                    subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey(),
+                    APIUtils.subredditAPICallLimit(subredditOrUserName), APIUtils.ANONYMOUS_USER_AGENT);
 
-        ListenableFuture<LoadResult<String, Post>> partialLoadResultFuture =
-                Futures.catching(pageFuture, HttpException.class,
-                        LoadResult.Error::new, executor);
+            ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(anonymousHomePosts, this::transformData, executor);
+            ListenableFuture<LoadResult<String, Post>> partialLoadResultFuture =
+                    Futures.catching(pageFuture, HttpException.class, LoadResult.Error::new, executor);
+            return Futures.catching(partialLoadResultFuture, IOException.class, LoadResult.Error::new, executor);
+        }
 
-        return Futures.catching(partialLoadResultFuture,
-                IOException.class, LoadResult.Error::new, executor);
+        // Parse composite after key
+        String mainAfterKey = getMainAfterKey(loadParams.getKey());
+        Map<String, String> currentUserAfterKeys = parseUserAfterKeys(loadParams.getKey());
+        final boolean isInitialLoad = loadParams.getKey() == null;
+
+        boolean hasSubreddits = subredditOnlyName != null && !subredditOnlyName.isEmpty();
+
+        // Launch subreddit posts fetch (reduced limit since we're merging with user posts)
+        ListenableFuture<Response<String>> mainFuture;
+        if (hasSubreddits) {
+            mainFuture = api.getAnonymousFrontPageOrMultiredditPostsListenableFuture(
+                    subredditOnlyName, sortType.getType(), sortType.getTime(), mainAfterKey,
+                    75, APIUtils.ANONYMOUS_USER_AGENT);
+        } else {
+            mainFuture = Futures.immediateFuture(null);
+        }
+
+        // Launch user post fetches in parallel
+        List<ListenableFuture<Response<String>>> userFutures = launchUserPostFetches(api, currentUserAfterKeys, isInitialLoad);
+        ListenableFuture<List<Response<String>>> allUserPosts = Futures.successfulAsList(userFutures);
+
+        ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.whenAllSucceed(mainFuture, allUserPosts)
+                .call(() -> {
+                    Response<String> mainResponse = Futures.getDone(mainFuture);
+                    List<Response<String>> userResponses = Futures.getDone(allUserPosts);
+                    return mergeResponses(mainResponse, userResponses, getUsersToFetch(currentUserAfterKeys, isInitialLoad));
+                }, executor);
+        return catchErrors(pageFuture);
     }
 }
