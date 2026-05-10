@@ -610,7 +610,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     return;
                 }
 
-                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                mCommentsAdapter.setComments(comments, hasMoreChildren);
                 restoreCommentScrollPosition();
             } else {
                 fetchPostAndCommentsById(postId);
@@ -625,7 +625,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             if (restoreCache(cache)) {
                 postDetailCommentsCacheManager.removeCache(mPost);
 
-                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                mCommentsAdapter.setComments(comments, hasMoreChildren);
                 restoreCommentScrollPosition();
             } else {
                 mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
@@ -760,8 +760,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     children = cached.children;
                     hasMoreChildren = cached.hasMoreChildren;
                     mPendingScrollPositionRestore = cached.scrollPosition;
-                    mCommentsAdapter.addComments(comments, hasMoreChildren);
+                    mCommentsAdapter.setComments(comments, hasMoreChildren);
                     restorePendingScrollPosition();
+                    CommentScrollPositionCache.getInstance().remove(mPost.getId());
 
                     if (children != null && children.size() > 0) {
                         setupChildrenScrollListener();
@@ -777,7 +778,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             } else if (isFetchingComments) {
                 fetchCommentsRespectRecommendedSort(false);
             } else {
-                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                mCommentsAdapter.setComments(comments, hasMoreChildren);
                 restorePendingScrollPosition();
                 if (isLoadingMoreChildren) {
                     isLoadingMoreChildren = false;
@@ -1595,8 +1596,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                                     children = cached.children;
                                                     hasMoreChildren = cached.hasMoreChildren;
                                                     mPendingScrollPositionRestore = cached.scrollPosition;
-                                                    mCommentsAdapter.addComments(comments, hasMoreChildren);
+                                                    mCommentsAdapter.setComments(comments, hasMoreChildren);
                                                     restorePendingScrollPosition();
+                                                    CommentScrollPositionCache.getInstance().remove(mPost.getId());
 
                                                     if (children != null && children.size() > 0) {
                                                         setupChildrenScrollListener();
@@ -1615,7 +1617,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                                                 ViewPostDetailFragment.this.children = moreChildrenIds;
 
                                                                 hasMoreChildren = children.size() != 0;
-                                                                mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
+                                                                mCommentsAdapter.setComments(expandedComments, hasMoreChildren);
                                                                 restorePendingScrollPosition();
 
                                                                 if (children.size() > 0) {
@@ -1767,7 +1769,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                         comments = expandedComments;
                         hasMoreChildren = children.size() != 0;
-                        mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
+                        mCommentsAdapter.setComments(expandedComments, hasMoreChildren);
                         restorePendingScrollPosition();
 
                         if (children.size() > 0) {

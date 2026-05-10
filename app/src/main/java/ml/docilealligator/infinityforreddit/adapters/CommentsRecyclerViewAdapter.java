@@ -1116,6 +1116,18 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mHasMoreComments = hasMoreComments;
     }
 
+    public void setComments(@NonNull ArrayList<Comment> comments, boolean hasMoreComments) {
+        resetCommentSearchIndex();
+        isInitiallyLoading = false;
+        isInitiallyLoadingFailed = false;
+        loadMoreCommentsFailed = false;
+
+        mVisibleComments.clear();
+        mVisibleComments.addAll(comments);
+        mHasMoreComments = hasMoreComments;
+        notifyDataSetChanged();
+    }
+
     public void addComment(Comment comment) {
         if (mVisibleComments.size() == 0 || isInitiallyLoadingFailed) {
             notifyItemRemoved(1);
