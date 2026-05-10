@@ -34,7 +34,12 @@ public class CommentScrollPositionCache {
     public void save(String postId, ArrayList<Comment> comments, ArrayList<String> children,
                      boolean hasMoreChildren, int scrollPosition) {
         if (postId != null && comments != null) {
-            cache.put(postId, new CachedPostComments(comments, children, hasMoreChildren, scrollPosition));
+            cache.put(postId, new CachedPostComments(
+                    new ArrayList<>(comments),
+                    children == null ? null : new ArrayList<>(children),
+                    hasMoreChildren,
+                    scrollPosition
+            ));
         }
     }
 
@@ -87,8 +92,8 @@ public class CommentScrollPositionCache {
 
         public CachedPostComments(ArrayList<Comment> comments, ArrayList<String> children,
                                    boolean hasMoreChildren, int scrollPosition) {
-            this.comments = comments;
-            this.children = children;
+            this.comments = comments == null ? null : new ArrayList<>(comments);
+            this.children = children == null ? null : new ArrayList<>(children);
             this.hasMoreChildren = hasMoreChildren;
             this.scrollPosition = scrollPosition;
         }
