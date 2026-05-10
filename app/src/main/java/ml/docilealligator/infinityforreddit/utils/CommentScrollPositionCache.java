@@ -34,12 +34,7 @@ public class CommentScrollPositionCache {
     public void save(String postId, ArrayList<Comment> comments, ArrayList<String> children,
                      boolean hasMoreChildren, int scrollPosition) {
         if (postId != null && comments != null) {
-            cache.put(postId, new CachedPostComments(
-                    new ArrayList<>(comments),
-                    children == null ? null : new ArrayList<>(children),
-                    hasMoreChildren,
-                    scrollPosition
-            ));
+            cache.put(postId, new CachedPostComments(comments, children, hasMoreChildren, scrollPosition));
         }
     }
 
