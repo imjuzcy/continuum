@@ -511,6 +511,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     String topScoreText = "";
                     if (comment.isScoreHidden()) {
                         commentText = mActivity.getString(R.string.hidden);
+                        topScoreText = mActivity.getString(R.string.hidden);
                     } else {
                         commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType());
@@ -522,6 +523,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     ((CommentBaseViewHolder) holder).topScoreTextView.setText(topScoreText);
                 } else {
                     ((CommentBaseViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                    ((CommentBaseViewHolder) holder).topScoreTextView.setText("");
                 }
 
                 // Child comment count badge next to the score when the comment is collapsed.
@@ -576,6 +578,14 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                         ((CommentBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                         ((CommentBaseViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                         ((CommentBaseViewHolder) holder).topScoreTextView.setTextColor(mDownvotedColor);
+                        break;
+                    default:
+                        ((CommentBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                        ((CommentBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
+                        ((CommentBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                        ((CommentBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
+                        ((CommentBaseViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                        ((CommentBaseViewHolder) holder).topScoreTextView.setTextColor(mSecondaryTextColor);
                         break;
                 }
 
@@ -683,6 +693,17 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setText(mActivity.getString(R.string.vote));
                 } else {
                     ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setText(mActivity.getString(R.string.hidden));
+                }
+                switch (comment.getVoteType()) {
+                    case Comment.VOTE_TYPE_UPVOTE:
+                        ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mUpvotedColor);
+                        break;
+                    case Comment.VOTE_TYPE_DOWNVOTE:
+                        ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mDownvotedColor);
+                        break;
+                    default:
+                        ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
+                        break;
                 }
                 ((CommentFullyCollapsedViewHolder) holder).binding.verticalBlockIndentationItemCommentFullyCollapsed.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentFullyCollapsedViewHolder) holder).binding.verticalBlockIndentationItemCommentFullyCollapsed.setLevelAndColors(comment.getDepth(), verticalBlockColors);
