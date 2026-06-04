@@ -37,6 +37,21 @@ configurations {
     }
 }
 
+// Append "-dirty" to the version name when building from a working tree that has uncommitted
+// changes to tracked files, mirroring Slide's androidGitVersion behaviour. This marks builds
+// that don't correspond to a clean commit. Untracked files are ignored (matching the plugin
+// default) so stray local files don't flag an otherwise-clean build.
+def gitVersionSuffix = {
+    try {
+        def status = providers.exec {
+            commandLine 'git', 'status', '--porcelain', '--untracked-files=no'
+        }.standardOutput.asText.get().trim()
+        return status.isEmpty() ? "" : "-dirty"
+    } catch (Exception ignored) {
+        return ""
+    }
+}
+
 android {
     def keystorePropertiesFile = rootProject.file("keystore.properties")
 
@@ -81,7 +96,12 @@ android {
         minSdk 24
         targetSdk 35
         versionCode 225
-        versionName "8.2.5.9.9.9.4"
+        versionName "8.2.5.9.9.9.4" + gitVersionSuffix()
+        def buildNumber = project.findProperty("buildNumber") ?: System.getenv("GITHUB_RUN_NUMBER")
+        if (buildNumber != null && !buildNumber.toString().isEmpty()) {
+            versionName = "8.2.5.9.9.8." + buildNumber + gitVersionSuffix()
+            versionCode = 225 + Integer.parseInt(buildNumber.toString())
+        }
         testInstrumentationRunner "com.kaspersky.kaspresso.runner.KaspressoRunner"
         // The fallback must be 22 characters (APIKeysPreferenceFragment.CLIENT_ID_LENGTH) and must
         // not be R.string.default_client_id, or the API Keys dialog leaves its OK button disabled
