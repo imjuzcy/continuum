@@ -1531,7 +1531,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             }
             itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
             binding.userNameTextViewItemCommentFullyCollapsed.setTextColor(mUsernameColor);
-            styleChildCountBadge(binding.childCountTextViewItemCommentFullyCollapsed, 0);
+            styleChildCountBadge(binding.childCountTextViewItemCommentFullyCollapsed, 2);
             binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
             binding.timeTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
 
