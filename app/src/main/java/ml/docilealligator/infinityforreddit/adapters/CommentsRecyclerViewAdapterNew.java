@@ -1079,7 +1079,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
 
             // Style the child comment count badges as rounded bubbles.
             for (TextView childCountBadge : new TextView[]{topChildCountTextView, childCountTextView}) {
-                styleChildCountBadge(childCountBadge);
+                styleChildCountBadge(childCountBadge, 2);
             }
 
             authorFlairTextView.setOnClickListener(view -> authorTextView.performClick());
@@ -1567,13 +1567,15 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     // comment re-collapsed after being expanded switches to the fully-collapsed row, which would
     // otherwise lose the pill. Each badge needs its own drawable instance since a shared Drawable
     // would share bounds between views.
-    // The badge carries no vertical padding, and both rows must keep it that way. Its height is
-    // what the header measures to: 2dp of padding here made the badge 12px taller than the text
-    // beside it, which grew the normal row's header and re-centred the username, score and
-    // timestamp 6px lower than the fully-collapsed row put them, so all four slid on every
-    // collapse. Padding it out again also makes it exceed the 24dp avatar in the fully-collapsed
-    // row and grows that header instead. Style the two rows identically or they cannot line up.
-    private void styleChildCountBadge(TextView childCountBadge) {
+    // verticalPaddingDp is per-caller, but both rows deliberately pass 2dp so the pill looks the
+    // same whichever row is showing. That padding is not free: the badge's height is what the
+    // header measures to, so 2dp makes it taller than the text beside it, grows the normal row's
+    // header and re-centres the username, score and timestamp relative to the fully-collapsed
+    // row, which shifts them on collapse. It also makes the badge exceed the 24dp avatar in the
+    // fully-collapsed row. Whatever the value, keep the two call sites equal or the rows cannot
+    // line up.
+    private void styleChildCountBadge(TextView childCountBadge, int verticalPaddingDp) {
+        int badgeVerticalPadding = (int) Utils.convertDpToPixel(verticalPaddingDp, mActivity);
         int badgeHorizontalPadding = (int) Utils.convertDpToPixel(4, mActivity);
         int badgeInset = (int) Utils.convertDpToPixel(1, mActivity);
         GradientDrawable badgeBackground = new GradientDrawable();
@@ -1581,7 +1583,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         badgeBackground.setCornerRadius(Utils.convertDpToPixel(8, mActivity));
         badgeBackground.setColor(mUsernameColor);
         childCountBadge.setBackground(new InsetDrawable(badgeBackground, badgeInset));
-        childCountBadge.setPadding(badgeHorizontalPadding, 0, badgeHorizontalPadding, 0);
+        childCountBadge.setPadding(badgeHorizontalPadding, badgeVerticalPadding, badgeHorizontalPadding, badgeVerticalPadding);
         childCountBadge.setTextColor(mCommentBackgroundColor);
         if (mActivity.typeface != null) {
             childCountBadge.setTypeface(mActivity.typeface);
@@ -1604,7 +1606,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             }
             itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
             binding.userNameTextViewItemCommentFullyCollapsed.setTextColor(mUsernameColor);
-            styleChildCountBadge(binding.childCountTextViewItemCommentFullyCollapsed);
+            styleChildCountBadge(binding.childCountTextViewItemCommentFullyCollapsed, 2);
             binding.scoreTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
             binding.timeTextViewItemCommentFullyCollapsed.setTextColor(mSecondaryTextColor);
 
