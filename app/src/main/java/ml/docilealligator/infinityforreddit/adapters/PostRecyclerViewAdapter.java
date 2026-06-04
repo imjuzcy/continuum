@@ -2097,7 +2097,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     private boolean shouldUseCompactLayout(Post post) {
-        return (post.getPreviews() == null || post.getPreviews().isEmpty()) && !hasValidThumbnailFallback(post.getThumbnailUrl());
+        return false;
     }
 
     /**
