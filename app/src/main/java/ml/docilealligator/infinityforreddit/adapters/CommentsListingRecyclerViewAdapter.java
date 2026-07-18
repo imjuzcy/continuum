@@ -118,7 +118,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private final boolean mShowElapsedTime;
     private final String mTimeFormatPattern;
     private final boolean mShowCommentDivider;
-    private final boolean mShowCommentTopPadding;
+    private final boolean mShowCommentUsernameTopPadding;
+    private final boolean mShowCommentHeaderAndBodyPadding;
     private final int mCommentTopPaddingPx;
     private final boolean mShowAbsoluteNumberOfVotes;
     private boolean canStartActivity = true;
@@ -143,7 +144,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mAccountName = accountName;
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        mShowCommentTopPadding = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
+        boolean showCommentTopPadding = sharedPreferences.getBoolean(
+                SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING,
+                sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, false));
+        mShowCommentUsernameTopPadding = showCommentTopPadding;
+        mShowCommentHeaderAndBodyPadding = showCommentTopPadding
+                && sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, true);
         mCommentTopPaddingPx = (int) Utils.convertDpToPixel(8, activity);
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
@@ -508,12 +514,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             this.replyButton = replyButton;
             this.commentDivider = commentDivider;
 
-            int commentTopMargin = mShowCommentTopPadding ? mCommentTopPaddingPx : 0;
+            int commentUsernameTopMargin = mShowCommentUsernameTopPadding ? mCommentTopPaddingPx : 0;
+            int commentHeaderAndBodyTopMargin = mShowCommentHeaderAndBodyPadding ? mCommentTopPaddingPx : 0;
             ViewGroup.MarginLayoutParams linearLayoutParams = (ViewGroup.MarginLayoutParams) linearLayout.getLayoutParams();
-            linearLayoutParams.topMargin = commentTopMargin;
+            linearLayoutParams.topMargin = commentUsernameTopMargin;
             linearLayout.setLayoutParams(linearLayoutParams);
             ViewGroup.MarginLayoutParams markdownLayoutParams = (ViewGroup.MarginLayoutParams) commentMarkdownView.getLayoutParams();
-            markdownLayoutParams.topMargin = commentTopMargin;
+            markdownLayoutParams.topMargin = commentHeaderAndBodyTopMargin;
             commentMarkdownView.setLayoutParams(markdownLayoutParams);
 
             replyButton.setVisibility(View.GONE);
