@@ -99,7 +99,7 @@ android {
         versionName "8.2.5.9.9.9.4" + gitVersionSuffix()
         def buildNumber = project.findProperty("buildNumber") ?: System.getenv("GITHUB_RUN_NUMBER")
         if (buildNumber != null && !buildNumber.toString().isEmpty()) {
-            versionName = "8.2.5.9.9.8." + buildNumber + gitVersionSuffix()
+            versionName = "8.2.5.9.9.8." + buildNumber
             versionCode = 225 + Integer.parseInt(buildNumber.toString())
         }
         testInstrumentationRunner "com.kaspersky.kaspresso.runner.KaspressoRunner"
