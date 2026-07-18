@@ -143,11 +143,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mAccountName = accountName;
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        boolean showCommentTopPaddingLegacy = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
-        mShowCommentUsernameTopPadding = sharedPreferences.getBoolean(
-                SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, showCommentTopPaddingLegacy);
-        mShowCommentHeaderAndBodyPadding = sharedPreferences.getBoolean(
-                SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, showCommentTopPaddingLegacy);
+        boolean showCommentTopPadding = sharedPreferences.getBoolean(
+                SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING,
+                sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, false));
+        mShowCommentUsernameTopPadding = showCommentTopPadding;
+        mShowCommentHeaderAndBodyPadding = showCommentTopPadding
+                && sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, true);
         mCommentTopPaddingPx = (int) Utils.convertDpToPixel(8, activity);
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);

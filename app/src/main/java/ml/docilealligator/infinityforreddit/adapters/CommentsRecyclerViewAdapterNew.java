@@ -314,11 +314,12 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, true);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        boolean showCommentTopPaddingLegacy = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
-        mShowCommentUsernameTopPadding = sharedPreferences.getBoolean(
-                SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, showCommentTopPaddingLegacy);
-        mShowCommentHeaderAndBodyPadding = sharedPreferences.getBoolean(
-                SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, showCommentTopPaddingLegacy);
+        boolean showCommentTopPadding = sharedPreferences.getBoolean(
+                SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING,
+                sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, false));
+        mShowCommentUsernameTopPadding = showCommentTopPadding;
+        mShowCommentHeaderAndBodyPadding = showCommentTopPadding
+                && sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, true);
         mCommentTopPaddingPx = (int) Utils.convertDpToPixel(8, activity);
         mDividerType = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.COMMENT_DIVIDER_TYPE, "0"));
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);

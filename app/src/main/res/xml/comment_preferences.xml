@@ -14,7 +14,7 @@
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
-        app:key="show_comment_username_top_padding"
+        app:key="show_comment_top_padding"
         app:summary="@string/settings_show_comment_username_top_padding_summary"
         app:title="@string/settings_show_comment_username_top_padding_title" />
 

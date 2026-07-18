@@ -25,18 +25,18 @@ public class CommentPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
-        if (sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING)
-                && !sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING)
-                && !sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING)) {
-            boolean showCommentTopPadding = sharedPreferences.getBoolean(
-                    SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
+        if (!sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING)
+                && sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING)) {
             sharedPreferences.edit()
-                    .putBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, showCommentTopPadding)
-                    .putBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, showCommentTopPadding)
+                    .putBoolean(
+                            SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING,
+                            sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, false))
                     .apply();
         }
 
         SwitchPreference showCommentDividerSwitchPreference = findPreference(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER);
+        SwitchPreference showCommentTopPaddingSwitchPreference = findPreference(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING);
+        SwitchPreference showCommentHeaderAndBodyPaddingSwitchPreference = findPreference(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING);
         ListPreference commentDividerTypeListPreference = findPreference(SharedPreferencesUtils.COMMENT_DIVIDER_TYPE);
         SliderPreference showFewerToolbarOptionsThresholdSliderPreference = findPreference(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD);
 
@@ -44,6 +44,15 @@ public class CommentPreferenceFragment extends CustomFontPreferenceFragmentCompa
             commentDividerTypeListPreference.setVisible(sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false));
             showCommentDividerSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 commentDividerTypeListPreference.setVisible((Boolean) newValue);
+                return true;
+            });
+        }
+
+        if (showCommentTopPaddingSwitchPreference != null && showCommentHeaderAndBodyPaddingSwitchPreference != null) {
+            showCommentHeaderAndBodyPaddingSwitchPreference.setVisible(
+                    sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false));
+            showCommentTopPaddingSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                showCommentHeaderAndBodyPaddingSwitchPreference.setVisible((Boolean) newValue);
                 return true;
             });
         }
