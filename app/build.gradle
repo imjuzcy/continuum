@@ -81,10 +81,10 @@ android {
         minSdk 24
         targetSdk 35
         versionCode 223
-        versionName "8.2.5.9.9.8" + gitVersionSuffix()
+        versionName "8.2.5.9.9.8"
         def buildNumber = project.findProperty("buildNumber") ?: System.getenv("GITHUB_RUN_NUMBER")
         if (buildNumber != null && !buildNumber.toString().isEmpty()) {
-            versionName = "8.2.5.9.9.8." + buildNumber + gitVersionSuffix()
+            versionName = "8.2.5.9.9.8." + buildNumber
             versionCode = 223 + Integer.parseInt(buildNumber.toString())
         }
         testInstrumentationRunner "com.kaspersky.kaspresso.runner.KaspressoRunner"
