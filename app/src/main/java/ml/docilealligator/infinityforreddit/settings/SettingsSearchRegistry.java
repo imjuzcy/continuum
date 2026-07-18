@@ -329,8 +329,11 @@ public class SettingsSearchRegistry {
                 CommentPreferenceFragment.class, R.string.settings_category_comment_title);
         add(items, c.getString(R.string.settings_show_comment_divider_title), null, bc,
                 CommentPreferenceFragment.class, R.string.settings_category_comment_title);
-        add(items, c.getString(R.string.settings_show_comment_top_padding_title),
-                c.getString(R.string.settings_show_comment_top_padding_summary), bc,
+        add(items, c.getString(R.string.settings_show_comment_username_top_padding_title),
+                c.getString(R.string.settings_show_comment_username_top_padding_summary), bc,
+                CommentPreferenceFragment.class, R.string.settings_category_comment_title);
+        add(items, c.getString(R.string.settings_show_comment_header_and_body_padding_title),
+                c.getString(R.string.settings_show_comment_header_and_body_padding_summary), bc,
                 CommentPreferenceFragment.class, R.string.settings_category_comment_title);
         add(items, c.getString(R.string.settings_show_only_one_comment_level_indicator), null, bc,
                 CommentPreferenceFragment.class, R.string.settings_category_comment_title);

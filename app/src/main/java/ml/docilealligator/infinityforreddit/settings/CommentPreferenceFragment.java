@@ -25,6 +25,17 @@ public class CommentPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
+        if (sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING)
+                && !sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING)
+                && !sharedPreferences.contains(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING)) {
+            boolean showCommentTopPadding = sharedPreferences.getBoolean(
+                    SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
+            sharedPreferences.edit()
+                    .putBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, showCommentTopPadding)
+                    .putBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, showCommentTopPadding)
+                    .apply();
+        }
+
         SwitchPreference showCommentDividerSwitchPreference = findPreference(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER);
         ListPreference commentDividerTypeListPreference = findPreference(SharedPreferencesUtils.COMMENT_DIVIDER_TYPE);
         SliderPreference showFewerToolbarOptionsThresholdSliderPreference = findPreference(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD);
