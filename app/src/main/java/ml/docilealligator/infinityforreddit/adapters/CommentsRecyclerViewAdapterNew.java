@@ -133,7 +133,8 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     private final boolean mCommentToolbarHideOnClick;
     private final boolean mSwapTapAndLong;
     private final boolean mShowCommentDivider;
-    private final boolean mShowCommentTopPadding;
+    private final boolean mShowCommentUsernameTopPadding;
+    private final boolean mShowCommentHeaderAndBodyPadding;
     private final int mCommentTopPaddingPx;
     private final int mDividerType;
     private final boolean mShowAbsoluteNumberOfVotes;
@@ -378,7 +379,12 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, true);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        mShowCommentTopPadding = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING, false);
+        boolean showCommentTopPadding = sharedPreferences.getBoolean(
+                SharedPreferencesUtils.SHOW_COMMENT_TOP_PADDING,
+                sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_USERNAME_TOP_PADDING, false));
+        mShowCommentUsernameTopPadding = showCommentTopPadding;
+        mShowCommentHeaderAndBodyPadding = showCommentTopPadding
+                && sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_HEADER_AND_BODY_PADDING, true);
         mCommentTopPaddingPx = (int) Utils.convertDpToPixel(8, activity);
         mDividerType = SharedPreferencesUtils.getInt(sharedPreferences, SharedPreferencesUtils.COMMENT_DIVIDER_TYPE, "0");
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
@@ -1244,10 +1250,10 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             this.commentIndentationView = commentIndentationView;
             this.commentDivider = commentDivider;
 
-            int commentTopMargin = mShowCommentTopPadding ? mCommentTopPaddingPx : 0;
+            int commentHeaderAndBodyTopMargin = mShowCommentHeaderAndBodyPadding ? mCommentTopPaddingPx : 0;
             applyCommentTopMargin(linearLayout);
             ViewGroup.MarginLayoutParams markdownLayoutParams = (ViewGroup.MarginLayoutParams) commentMarkdownView.getLayoutParams();
-            markdownLayoutParams.topMargin = commentTopMargin;
+            markdownLayoutParams.topMargin = commentHeaderAndBodyTopMargin;
             commentMarkdownView.setLayoutParams(markdownLayoutParams);
 
             if (mVoteButtonsOnTheRight) {
@@ -1807,7 +1813,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
 
     private void applyCommentTopMargin(View view) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        layoutParams.topMargin = mShowCommentTopPadding ? mCommentTopPaddingPx : 0;
+        layoutParams.topMargin = mShowCommentUsernameTopPadding ? mCommentTopPaddingPx : 0;
         view.setLayoutParams(layoutParams);
     }
 
