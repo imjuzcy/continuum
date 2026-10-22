@@ -14,6 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # The random-subreddit assets are symlinks into a sibling subreddit-lists checkout.
+    - name: Checkout subreddit-lists
+      run: git clone --depth 1 https://github.com/cygnusx-1-org/subreddit-lists.git ${{ github.workspace }}/../subreddit-lists
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
