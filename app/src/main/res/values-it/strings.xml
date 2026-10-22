@@ -495,7 +495,6 @@ Tocca per riprovare."</string>
     <string name="settings_show_top_level_comments_first_title">"Mostra Prima i Commenti Top"</string>
     <string name="settings_show_comment_divider_title">"Mostra un divisorio tra i commenti"</string>
     <string name="settings_show_comment_top_padding_title">"Mostra commento Imbottitura superiore"</string>
-    <string name="settings_show_comment_top_padding_summary">"Aumenta il riempimento sopra il nome utente e tra l'intestazione e il corpo del commento"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Clicca per Mostrare/Nascondere gli Strumenti dei Commenti"</string>
     <string name="settings_fully_collapse_comment_title">"Comprimi Completamente il Commento"</string>
     <string name="settings_comment_toolbar_hidden">"Strumenti Commento Nascosti per Impostazione Predefinita"</string>

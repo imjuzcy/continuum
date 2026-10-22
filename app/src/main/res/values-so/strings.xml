@@ -484,7 +484,6 @@
     <string name="settings_show_top_level_comments_first_title">"Muuji Faallooyinka Heerka Sare Marka hore"</string>
     <string name="settings_show_comment_divider_title">"Show Qaybiyaha Faallada"</string>
     <string name="settings_show_comment_top_padding_title">"Muuji Faallooyinka Sare"</string>
-    <string name="settings_show_comment_top_padding_summary">"Kordhi suufka ka sarreeya magaca isticmaalaha iyo inta u dhaxaysa madaxa iyo jidhka faallooyinka"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Guji si aad u muujiso/qariso Toolbarka faallooyinka"</string>
     <string name="settings_fully_collapse_comment_title">"Si Buuxda U Burburi Faallo"</string>
     <string name="settings_comment_toolbar_hidden">"Qalabka Faallada Waxaa Qarsoomay Default"</string>

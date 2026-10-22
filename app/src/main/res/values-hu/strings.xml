@@ -486,7 +486,6 @@
     <string name="settings_show_top_level_comments_first_title">"Felső szintű hozzászólások megjelenítése először"</string>
     <string name="settings_show_comment_divider_title">"Hozzászólás-elválasztó megjelenítése"</string>
     <string name="settings_show_comment_top_padding_title">"Megjegyzés megjelenítése Top Padding"</string>
-    <string name="settings_show_comment_top_padding_summary">"Kitöltés növelése a felhasználónév felett, valamint a fejléc és a megjegyzés törzse között"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Koppintás a hozzászólás eszköztár megjelenítéséhez/elrejtéséhez"</string>
     <string name="settings_fully_collapse_comment_title">"Hozzászólás teljes összecsukása"</string>
     <string name="settings_comment_toolbar_hidden">"A hozzászólás eszköztár alapértelmezés szerint rejtett"</string>

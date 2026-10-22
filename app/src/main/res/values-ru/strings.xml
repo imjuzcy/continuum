@@ -493,7 +493,6 @@
     <string name="settings_show_top_level_comments_first_title">"Сначала показывать комментарии верхнего уровня"</string>
     <string name="settings_show_comment_divider_title">"Показывать разделитель комментариев"</string>
     <string name="settings_show_comment_top_padding_title">"Показать верхний отступ комментария"</string>
-    <string name="settings_show_comment_top_padding_summary">"Увеличь отступы над именем пользователя и между заголовком и телом комментария."</string>
     <string name="settings_comment_toolbar_hide_on_click">"Нажатие показывает/скрывает панель инструментов комментария"</string>
     <string name="settings_fully_collapse_comment_title">"Полностью свернуть комментарий"</string>
     <string name="settings_comment_toolbar_hidden">"Скрыть панель инструментов комментария по умолчанию"</string>

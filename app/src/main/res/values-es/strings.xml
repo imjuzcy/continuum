@@ -494,7 +494,6 @@ Toca para reintentar."</string>
     <string name="settings_show_top_level_comments_first_title">"Mostrar el comentario más alto primero"</string>
     <string name="settings_show_comment_divider_title">"Mostrar divisor en los comentarios"</string>
     <string name="settings_show_comment_top_padding_title">"Mostrar comentario Relleno superior"</string>
-    <string name="settings_show_comment_top_padding_summary">"Aumentar el relleno encima del nombre de usuario y entre el encabezado y el cuerpo del comentario"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Presionar para mostrar/ocultar la barra de herramientas en los comentarios"</string>
     <string name="settings_fully_collapse_comment_title">"Colapsar los comentarios por completo"</string>
     <string name="settings_comment_toolbar_hidden">"Barra de herramientas oculta por defecto"</string>

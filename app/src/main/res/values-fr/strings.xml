@@ -489,7 +489,6 @@ Appuyez pour réessayer."</string>
     <string name="settings_show_top_level_comments_first_title">"Afficher d'abord les Commentaires de Haut Niveau"</string>
     <string name="settings_show_comment_divider_title">"Afficher le séparateur de commentaires"</string>
     <string name="settings_show_comment_top_padding_title">"Afficher le commentaire Remplissage supérieur"</string>
-    <string name="settings_show_comment_top_padding_summary">"Augmenter le remplissage au-dessus du nom d'utilisateur et entre l'en-tête et le corps du commentaire"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Appuyez pour afficher ou masquer la barre d'outils des commentaires"</string>
     <string name="settings_fully_collapse_comment_title">"Réduire complètement le commentaire"</string>
     <string name="settings_comment_toolbar_hidden">"Barre d'outils de commentaires masquée par défaut"</string>

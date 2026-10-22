@@ -494,7 +494,6 @@ Apasă pentru reîncărcare."</string>
     <string name="settings_show_top_level_comments_first_title">"Afișează comentariile de top mai întâi"</string>
     <string name="settings_show_comment_divider_title">"Afișează separatorul de comentarii"</string>
     <string name="settings_show_comment_top_padding_title">"Afișează comentariul Top Padding"</string>
-    <string name="settings_show_comment_top_padding_summary">"Mărește umplutura deasupra numelui de utilizator și între antet și corpul comentariului"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Apasă pentru a ascunde/arăta bara de instrumente pt. comentarii"</string>
     <string name="settings_fully_collapse_comment_title">"Restrânge complet comentariul"</string>
     <string name="settings_comment_toolbar_hidden">"Bara de instrumente pentru comentarii este ascunsă în mod implicit"</string>

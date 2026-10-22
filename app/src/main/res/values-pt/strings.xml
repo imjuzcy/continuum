@@ -494,7 +494,6 @@ Toque para tentar novamente."</string>
     <string name="settings_show_top_level_comments_first_title">"Mostrar Comentários de Topo Primeiro"</string>
     <string name="settings_show_comment_divider_title">"Mostrar Separador de Comentários"</string>
     <string name="settings_show_comment_top_padding_title">"Mostrar preenchimento superior do comentário"</string>
-    <string name="settings_show_comment_top_padding_summary">"Aumente o preenchimento acima do nome de utilizador e entre o cabeçalho e o corpo do comentário"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Clicar para Mostrar/Esconder a Barra de Ferramentas dos Comentários"</string>
     <string name="settings_fully_collapse_comment_title">"Colapsar Comentário por Completo"</string>
     <string name="settings_comment_toolbar_hidden">"Barra de Ferramentas dos Comentários Escondida por Defeito"</string>

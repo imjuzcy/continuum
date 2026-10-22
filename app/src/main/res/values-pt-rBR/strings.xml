@@ -495,7 +495,6 @@ Toque para tentar de novo."</string>
     <string name="settings_show_top_level_comments_first_title">"Exibir Comentários Mais Votados Primeiro"</string>
     <string name="settings_show_comment_divider_title">"Exibir Divisão de Comentários"</string>
     <string name="settings_show_comment_top_padding_title">"Mostrar preenchimento superior do comentário"</string>
-    <string name="settings_show_comment_top_padding_summary">"Aumente o preenchimento acima do nome de usuário e entre o cabeçalho e o corpo do comentário"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Clicar para Exibir/Ocultar a Barra de Comentários"</string>
     <string name="settings_fully_collapse_comment_title">"Retrair totalmente os comentários"</string>
     <string name="settings_comment_toolbar_hidden">"Barra de Comentários Oculta por Padrão"</string>

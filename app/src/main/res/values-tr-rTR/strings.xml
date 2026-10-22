@@ -495,7 +495,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_show_top_level_comments_first_title">"Önce En İyi Yorumları Göster"</string>
     <string name="settings_show_comment_divider_title">"Yorum Bölücüsünü Göster"</string>
     <string name="settings_show_comment_top_padding_title">"Yorumu Göster Üst Dolgu"</string>
-    <string name="settings_show_comment_top_padding_summary">"Kullanıcı adının üzerindeki ve başlık ile yorum gövdesi arasındaki dolguyu artırın"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Yorum Araç Çubuğunu Göstermek / Gizlemek İçin Tıkla"</string>
     <string name="settings_fully_collapse_comment_title">"Yorumu Tamamen Daralt"</string>
     <string name="settings_comment_toolbar_hidden">"Varsayılan Gizli Yorum Araç Çubuğu"</string>

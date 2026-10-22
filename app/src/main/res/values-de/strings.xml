@@ -494,7 +494,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_show_top_level_comments_first_title">"Top-Level-Kommentare zuerst anzeigen"</string>
     <string name="settings_show_comment_divider_title">"Kommentar-Trennleiste anzeigen"</string>
     <string name="settings_show_comment_top_padding_title">"Oberen Abstand bei Kommentaren anzeigen"</string>
-    <string name="settings_show_comment_top_padding_summary">"Den Abstand über dem Benutzernamen und zwischen Kopfzeile und Kommentartext vergrößern"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Klicken, um Kommentar-Werkzeugleiste anzuzeigen / zu verstecken"</string>
     <string name="settings_fully_collapse_comment_title">"Kommentar ganz zusammenklappen"</string>
     <string name="settings_comment_toolbar_hidden">"Kommentar-Werkzeugleiste standardmäßig versteckt"</string>

@@ -494,7 +494,6 @@
     <string name="settings_show_top_level_comments_first_title">"Nejprve zobrazit komentáře s nejvyšší úrovní"</string>
     <string name="settings_show_comment_divider_title">"Zobrazit oddělovač komentářů"</string>
     <string name="settings_show_comment_top_padding_title">"Zobrazit komentář Top Padding"</string>
-    <string name="settings_show_comment_top_padding_summary">"Zvětšit odsazení nad uživatelským jménem a mezi záhlavím a tělem komentáře"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Kliknutí pro zobrazení/skrytí nástrojové lišty u komentáře"</string>
     <string name="settings_fully_collapse_comment_title">"Plně sbalit komentář"</string>
     <string name="settings_comment_toolbar_hidden">"Nástrojová lišta u komentářů skrytá"</string>
