@@ -489,7 +489,6 @@
     <string name="settings_show_top_level_comments_first_title">"शीर्ष टिप्पणियां सर्वप्रथम "</string>
     <string name="settings_show_comment_divider_title">"टिप्पणी विभाजक दिखाएं "</string>
     <string name="settings_show_comment_top_padding_title">"टिप्पणी शीर्ष पैडिंग दिखाएं"</string>
-    <string name="settings_show_comment_top_padding_summary">"उपयोगकर्ता नाम के ऊपर और हेडर और टिप्पणी मुख्य भाग के बीच पैडिंग बढ़ाएँ"</string>
     <string name="settings_comment_toolbar_hide_on_click">"टिप्पणी टूलबार को दिखाने/छुपाने के लिए क्लिक "</string>
     <string name="settings_fully_collapse_comment_title">"टिप्पणियों को संक्षिप्त करें"</string>
     <string name="settings_comment_toolbar_hidden">"पूर्वनिर्धारित रूप से टिप्पणी टूलबार अदृश्य "</string>

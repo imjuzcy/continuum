@@ -494,7 +494,6 @@
     <string name="settings_show_top_level_comments_first_title">"优先显示顶层评论"</string>
     <string name="settings_show_comment_divider_title">"显示评论分隔线"</string>
     <string name="settings_show_comment_top_padding_title">"显示评论 顶部填充"</string>
-    <string name="settings_show_comment_top_padding_summary">"增加用户名上方以及标题和评论正文之间的填充"</string>
     <string name="settings_comment_toolbar_hide_on_click">"点击以显示/隐藏评论工具栏"</string>
     <string name="settings_fully_collapse_comment_title">"完全折叠评论"</string>
     <string name="settings_comment_toolbar_hidden">"默认隐藏评论工具栏"</string>

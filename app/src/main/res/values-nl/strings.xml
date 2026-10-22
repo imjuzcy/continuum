@@ -490,7 +490,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_show_top_level_comments_first_title">"Reacties op bovenste niveau eerst tonen"</string>
     <string name="settings_show_comment_divider_title">"Scheidingslijn tonen tussen reacties"</string>
     <string name="settings_show_comment_top_padding_title">"Toon commentaar Bovenste vulling"</string>
-    <string name="settings_show_comment_top_padding_summary">"Vergroot de opvulling boven de gebruikersnaam en tussen de koptekst en de commentaartekst"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Druk om de reactiewerkbalk te tonen/verbergen"</string>
     <string name="settings_fully_collapse_comment_title">"Reacties volledig inklappen"</string>
     <string name="settings_comment_toolbar_hidden">"De reactiewerkbalk is standaard verborgen"</string>

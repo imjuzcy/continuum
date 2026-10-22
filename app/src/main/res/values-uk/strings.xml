@@ -494,7 +494,6 @@
     <string name="settings_show_top_level_comments_first_title">"Показувати коментарі верхнього рівня спочатку"</string>
     <string name="settings_show_comment_divider_title">"Показувати роздільник коментарів"</string>
     <string name="settings_show_comment_top_padding_title">"Показати коментар Верхнє відступ"</string>
-    <string name="settings_show_comment_top_padding_summary">"Збільшити відступ над іменем користувача та між заголовком і тілом коментаря"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Клацнути, щоб показати/сховати панель засобів коментарів"</string>
     <string name="settings_fully_collapse_comment_title">"Повністю згортати коментарі"</string>
     <string name="settings_comment_toolbar_hidden">"Панель засобів коментарів прихована типово"</string>

@@ -491,7 +491,6 @@
     <string name="settings_show_top_level_comments_first_title">"உயர்மட்ட கருத்துகளை முதலில் காட்டு"</string>
     <string name="settings_show_comment_divider_title">"கருத்து வகுப்பானைக் காட்டு"</string>
     <string name="settings_show_comment_top_padding_title">"கருத்துரை மேல் திணிப்பு காட்டு"</string>
-    <string name="settings_show_comment_top_padding_summary">"பயனர்பெயருக்கு மேல் மற்றும் தலைப்பு மற்றும் கருத்து பகுதிக்கு இடையில் திணிப்பை அதிகரிக்கவும்"</string>
     <string name="settings_comment_toolbar_hide_on_click">"கருத்து கருவிப்பட்டையை காட்ட/மறைக்க சொடுக்கு"</string>
     <string name="settings_fully_collapse_comment_title">"கருத்தை முழுமையாகச் சுருக்கு"</string>
     <string name="settings_comment_toolbar_hidden">"கருத்து கருவிப்பட்டை இயல்பாக மறைந்திருக்கும்"</string>

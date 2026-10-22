@@ -487,7 +487,6 @@
     <string name="settings_show_top_level_comments_first_title">"Εμφάνιση των Καλύτερων σχολίων Πρώτα"</string>
     <string name="settings_show_comment_divider_title">"Εμφάνιση Διαχωριστικού Σχολίων"</string>
     <string name="settings_show_comment_top_padding_title">"Εμφάνιση σχολίου επάνω επένδυση"</string>
-    <string name="settings_show_comment_top_padding_summary">"Αύξηση συμπλήρωσης πάνω από το όνομα χρήστη και μεταξύ της κεφαλίδας και του σώματος σχολίου"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Κλικ για Εμφάνιση/Απόκρυψη Εργαλειοθήκης Σχολίων"</string>
     <string name="settings_fully_collapse_comment_title">"Πλήρης Κατάρρευση Σχολίου"</string>
     <string name="settings_comment_toolbar_hidden">"Εργαλειοθήκη Σχολίων Κρυφή από Προεπιλογή"</string>

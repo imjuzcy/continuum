@@ -485,7 +485,6 @@
     <string name="settings_show_top_level_comments_first_title">"Prvo prikaži vrhunske komentare"</string>
     <string name="settings_show_comment_divider_title">"Prikaži razdjelnik između komentara"</string>
     <string name="settings_show_comment_top_padding_title">"Prikaži komentar Gornja podstava"</string>
-    <string name="settings_show_comment_top_padding_summary">"Povećaj udaljenost iznad korisničkog imena i između zaglavlja i tijela komentara"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Dotakni za Skrivanje/Prikazivanje alatne trake komentara"</string>
     <string name="settings_fully_collapse_comment_title">"Potpuno smanji komentar"</string>
     <string name="settings_comment_toolbar_hidden">"Alatna traka skrivena pod zadano"</string>

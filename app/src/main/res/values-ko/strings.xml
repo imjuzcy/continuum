@@ -494,7 +494,6 @@
     <string name="settings_show_top_level_comments_first_title">"가장 높은 댓글 우선 표시"</string>
     <string name="settings_show_comment_divider_title">"코멘트 구분선 표시"</string>
     <string name="settings_show_comment_top_padding_title">"코멘트 상단 패딩 표시"</string>
-    <string name="settings_show_comment_top_padding_summary">"사용자 이름 위, 헤더와 주석 본문 사이의 패딩을 늘립니다."</string>
     <string name="settings_comment_toolbar_hide_on_click">"터치하여 댓글 툴바 표시/숨기기"</string>
     <string name="settings_fully_collapse_comment_title">"댓글 숨기기"</string>
     <string name="settings_comment_toolbar_hidden">"댓글 툴바 기본으로 숨김"</string>

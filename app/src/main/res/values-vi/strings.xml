@@ -487,7 +487,6 @@ Nhấn để thử lại."</string>
     <string name="settings_show_top_level_comments_first_title">"Hiện bình luận cấp trên cùng trước"</string>
     <string name="settings_show_comment_divider_title">"Hiện chia tách bình luận"</string>
     <string name="settings_show_comment_top_padding_title">"Hiển thị Bình luận Phần đệm trên cùng"</string>
-    <string name="settings_show_comment_top_padding_summary">"Tăng phần đệm phía trên tên người dùng và giữa tiêu đề và nội dung bình luận"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Nhấn để hiện/ẩn thanh công cụ bình luận"</string>
     <string name="settings_fully_collapse_comment_title">"Thu gọn bình luận hoàn toàn"</string>
     <string name="settings_comment_toolbar_hidden">"Thanh công cụ bình luận bị ẩn theo mặc định"</string>

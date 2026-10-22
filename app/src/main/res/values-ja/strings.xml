@@ -493,7 +493,6 @@
     <string name="settings_show_top_level_comments_first_title">"最上位コメントを先に表示"</string>
     <string name="settings_show_comment_divider_title">"コメントの分割線を表示"</string>
     <string name="settings_show_comment_top_padding_title">"コメントの上部パディングを表示"</string>
-    <string name="settings_show_comment_top_padding_summary">"ユーザー名の上、ヘッダーとコメント本文の間のパディングを増やします"</string>
     <string name="settings_comment_toolbar_hide_on_click">"タップでコメントツールバーを表示/非表示"</string>
     <string name="settings_fully_collapse_comment_title">"コメントを完全に折りたたむ"</string>
     <string name="settings_comment_toolbar_hidden">"コメントツールバーを標準で非表示"</string>

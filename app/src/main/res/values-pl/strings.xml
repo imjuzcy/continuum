@@ -487,7 +487,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_show_top_level_comments_first_title">"Pokazuj topowe komentarze jako pierwsze"</string>
     <string name="settings_show_comment_divider_title">"Pokaż rozdzielacz komentarzy"</string>
     <string name="settings_show_comment_top_padding_title">"Pokaż komentarz Górne wypełnienie"</string>
-    <string name="settings_show_comment_top_padding_summary">"Zwiększ dopełnienie nad nazwą użytkownika oraz pomiędzy nagłówkiem a treścią komentarza"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Kliknij aby pokazać/ukryć pasek narzędzi komentarzy"</string>
     <string name="settings_fully_collapse_comment_title">"Całkowicie zwiń komentarz"</string>
     <string name="settings_comment_toolbar_hidden">"Pasek narzędzi jest ukryty domyślnie"</string>
